@@ -1,4 +1,4 @@
-package com.companyname.appname.sample
+package com.companyname.appname.customer
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

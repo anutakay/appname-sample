@@ -1,6 +1,6 @@
-package com.companyname.appname.sample.di
+package com.companyname.appname.customer.di
 
-import com.companyname.appname.feature1.di.AppHash
+import com.companyname.appname.presentation.feature1.di.AppHash
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

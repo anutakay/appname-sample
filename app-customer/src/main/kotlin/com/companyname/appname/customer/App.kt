@@ -1,4 +1,4 @@
-package com.companyname.appname.sample
+package com.companyname.appname.customer
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

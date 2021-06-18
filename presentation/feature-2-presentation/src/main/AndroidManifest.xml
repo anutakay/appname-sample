@@ -3,6 +3,6 @@
     package="com.companyname.appname.feature_2_presentation">
 
     <application>
-        <activity android:name=".Feature2Activity" />
+        <activity android:name="com.companyname.appname.presentation.feature2.Feature2Activity" />
     </application>
 </manifest>

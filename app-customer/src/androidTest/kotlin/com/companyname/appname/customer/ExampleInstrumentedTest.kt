@@ -1,4 +1,4 @@
-package com.companyname.appname.sample
+package com.companyname.appname.customer
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

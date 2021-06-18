@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.companyname.appname.feature1.Feature1Activity">
+    tools:context="com.companyname.appname.presentation.feature1.Feature1Activity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/feature1_fragment_container"
-        android:name="com.companyname.appname.feature1.fragments.first.FirstFragment"
+        android:name="com.companyname.appname.presentation.feature1.fragments.first.FirstFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -1,3 +1,5 @@
+include ':common-data'
+include ':bored-api-data'
 include ':feature-2-presentation'
 include ':common-domain'
 include ':common-presentation'

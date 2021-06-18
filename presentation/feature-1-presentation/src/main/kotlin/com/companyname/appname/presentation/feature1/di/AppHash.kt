@@ -1,4 +1,4 @@
-package com.companyname.appname.feature1.di
+package com.companyname.appname.presentation.feature1.di
 
 import javax.inject.Qualifier
 
