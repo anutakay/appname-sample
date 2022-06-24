@@ -1,9 +1,9 @@
 package com.companyname.appname.presentation.common.delegate
 
 import androidx.lifecycle.LifecycleOwner
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface IRxObserverDelegate {
     fun registerObserverDelegate(owner: LifecycleOwner)
-    fun <T> Observable<T>.observe(observer: (T) -> Unit)
+    fun <T : Any> Observable<T>.observe(observer: (T) -> Unit)
 }

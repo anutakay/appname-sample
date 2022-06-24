@@ -1,28 +1,26 @@
 package com.companyname.appname.presentation.feature2.fragments.rmvvm
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.companyname.appname.domain.bored.usecases.GetRandomActivityUseCase
-import com.companyname.appname.domain.common.Result
+import com.companyname.appname.domain.bored.usecases.GetRandomActivity
+import com.companyname.appname.domain.common.LCE
 import com.companyname.appname.presentation.common.Action
 import com.companyname.appname.presentation.common.delegate.IRxTrackDelegate
 import com.companyname.appname.presentation.common.delegate.RxTrackDelegate
 import com.companyname.appname.presentation.common.extention.filterTo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Observable
-import io.reactivex.processors.BehaviorProcessor
-import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.processors.BehaviorProcessor
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class RandomActivityViewModel @Inject constructor(
-    val getRandomActivity: GetRandomActivityUseCase
+    private val getRandomActivity: GetRandomActivity
 ) : ViewModel(),
     IRxTrackDelegate by RxTrackDelegate() {
 
-    val actionStream = PublishSubject.create<Action>()
+    val actionStream: PublishSubject<Action> = PublishSubject.create()
 
     private val viewState by lazy {
         BehaviorProcessor.createDefault((RandomActivityViewState(title = "")))
@@ -35,21 +33,15 @@ class RandomActivityViewModel @Inject constructor(
     init {
         actionStream.filterTo(LoadRandomActivityAction::class.java)
             .throttleFirst(1, TimeUnit.SECONDS)
-            .subscribe { loadRandomActivity() }
-            .track()
-    }
-
-    private fun loadRandomActivity() {
-        viewModelScope.launch {
-            progressState.onNext(true)
-            when (val result = getRandomActivity()) {
-                is Result.Success ->
-                    viewState.onNext(viewState.value?.copy(title = result.data.activity))
-                is Result.Error -> TODO()
-                Result.Loading -> TODO()
+            .flatMap { getRandomActivity.instance().execute() }
+            .subscribe {
+                when (it) {
+                    is LCE.Content -> viewState.onNext(viewState.value!!.copy(title = it.data.activity))
+                    is LCE.Error -> TODO()
+                    LCE.Loading -> TODO()
+                }
             }
-            progressState.onNext(false)
-        }
+            .track()
     }
 
     fun viewState(): Observable<RandomActivityViewState> = viewState.toObservable()

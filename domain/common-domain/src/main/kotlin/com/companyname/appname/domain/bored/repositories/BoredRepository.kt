@@ -1,8 +1,9 @@
 package com.companyname.appname.domain.bored.repositories
 
 import com.companyname.appname.domain.bored.entities.Activity
-import com.companyname.appname.domain.common.Result
+import com.companyname.appname.domain.common.LCE
+import io.reactivex.rxjava3.core.Single
 
 interface BoredRepository {
-    suspend fun getRandomActivity(): Result<Activity>
+    fun getRandomActivity(): Single<LCE<Activity>>
 }

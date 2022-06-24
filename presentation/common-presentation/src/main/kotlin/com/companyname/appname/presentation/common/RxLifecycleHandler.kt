@@ -3,10 +3,10 @@ package com.companyname.appname.presentation.common
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 
-class RxLifecycleHandler<T>(
+class RxLifecycleHandler<T : Any>(
     owner: LifecycleOwner,
     private val observable: Observable<T>,
     private val observer: (T) -> Unit

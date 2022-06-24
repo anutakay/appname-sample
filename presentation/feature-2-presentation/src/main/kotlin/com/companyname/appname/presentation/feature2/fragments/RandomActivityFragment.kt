@@ -13,7 +13,7 @@ import com.companyname.appname.presentation.common.extention.visibility
 import com.companyname.appname.presentation.feature2.fragments.rmvvm.LoadRandomActivityAction
 import com.companyname.appname.presentation.feature2.fragments.rmvvm.RandomActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 @AndroidEntryPoint
 class RandomActivityFragment : Fragment(),

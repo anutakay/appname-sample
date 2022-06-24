@@ -14,7 +14,7 @@ import com.companyname.appname.presentation.feature1.fragments.first.rmvvm.First
 import com.companyname.appname.presentation.feature1.fragments.first.rmvvm.NextFragmentButtonClickAction
 import com.github.terrakok.cicerone.Screen
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 @AndroidEntryPoint
 class FirstFragment : Fragment(),

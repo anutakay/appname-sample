@@ -1,8 +1,8 @@
 package com.companyname.appname.presentation.common.delegate
 
 import androidx.lifecycle.LifecycleOwner
-import com.companyname.appname.presentation.common.extention.observe
-import io.reactivex.Observable
+import com.companyname.appname.presentation.common.RxLifecycleHandler
+import io.reactivex.rxjava3.core.Observable
 
 class RxObserverDelegate : IRxObserverDelegate {
 
@@ -12,7 +12,7 @@ class RxObserverDelegate : IRxObserverDelegate {
         this.owner = owner
     }
 
-    override fun <T> Observable<T>.observe(observer: (T) -> Unit) {
-        observe(owner, observer)
+    override fun <T : Any> Observable<T>.observe(observer: (T) -> Unit) {
+        RxLifecycleHandler(owner, this, observer)
     }
 }

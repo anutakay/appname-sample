@@ -9,9 +9,9 @@ import com.companyname.appname.presentation.common.extention.filterTo
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Observable
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.processors.PublishProcessor
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class FirstViewModel @Inject constructor(
 ) : ViewModel(),
     IRxTrackDelegate by RxTrackDelegate() {
 
-    val actionStream = PublishSubject.create<Action>()
+    val actionStream: PublishSubject<Action> = PublishSubject.create()
 
     private val navigateViewState = PublishProcessor.create<Screen>()
 

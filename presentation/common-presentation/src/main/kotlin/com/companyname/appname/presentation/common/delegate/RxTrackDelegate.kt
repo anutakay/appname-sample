@@ -1,7 +1,7 @@
 package com.companyname.appname.presentation.common.delegate
 
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 class RxTrackDelegate : IRxTrackDelegate {
 
