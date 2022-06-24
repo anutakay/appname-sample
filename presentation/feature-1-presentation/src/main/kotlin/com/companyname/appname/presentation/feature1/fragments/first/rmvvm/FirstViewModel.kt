@@ -6,7 +6,7 @@ import com.companyname.appname.presentation.common.extention.filterTo
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.processors.PublishProcessor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -37,5 +37,5 @@ class FirstViewModel @Inject constructor(
     private fun nextFragmentButtonClicked() = router.navigateTo(screens.second())
     private fun anotherFeatureButtonClick() = router.newRootScreen(screens.feature2())
 
-    fun navigateViewState(): Flowable<Screen> = navigateViewState.hide()
+    fun navigateViewState(): Observable<Screen> = navigateViewState.toObservable()
 }

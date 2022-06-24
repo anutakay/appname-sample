@@ -3,12 +3,12 @@ package com.companyname.appname.presentation.common
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 
 class RxLifecycleHandler<T>(
     owner: LifecycleOwner,
-    private val flowable: Flowable<T>,
+    private val observable: Observable<T>,
     private val observer: (T) -> Unit
 ) : DefaultLifecycleObserver {
     private val lifecycle = owner.lifecycle
@@ -24,7 +24,7 @@ class RxLifecycleHandler<T>(
     private fun observeIfPossible() {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             disposable ?: let {
-                disposable = flowable.subscribe { data -> observer(data) }
+                disposable = observable.subscribe { data -> observer(data) }
             }
         }
     }
