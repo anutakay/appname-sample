@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Module
 class BoredApiModule {
 
-    private val baseUrl: String = "https://www.boredapi.com/api/"
+    private val baseUrl: String = "http://www.boredapi.com/api/"
 
     @Singleton
     @Provides
