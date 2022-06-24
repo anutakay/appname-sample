@@ -1,13 +1,17 @@
 package com.companyname.appname.presentation.feature1.fragments.first.rmvvm
 
-import com.companyname.appname.presentation.common.BaseViewModel
+import androidx.lifecycle.ViewModel
+import com.companyname.appname.presentation.common.Action
 import com.companyname.appname.presentation.common.Screens
+import com.companyname.appname.presentation.common.delegate.IRxTrackDelegate
+import com.companyname.appname.presentation.common.delegate.RxTrackDelegate
 import com.companyname.appname.presentation.common.extention.filterTo
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -15,7 +19,10 @@ import javax.inject.Inject
 class FirstViewModel @Inject constructor(
     private val screens: Screens,
     private val router: Router
-) : BaseViewModel() {
+) : ViewModel(),
+    IRxTrackDelegate by RxTrackDelegate() {
+
+    val actionStream = PublishSubject.create<Action>()
 
     private val navigateViewState = PublishProcessor.create<Screen>()
 
@@ -38,4 +45,9 @@ class FirstViewModel @Inject constructor(
     private fun anotherFeatureButtonClick() = router.newRootScreen(screens.feature2())
 
     fun navigateViewState(): Observable<Screen> = navigateViewState.toObservable()
+
+    override fun onCleared() {
+        super.onCleared()
+        clearTracked()
+    }
 }
