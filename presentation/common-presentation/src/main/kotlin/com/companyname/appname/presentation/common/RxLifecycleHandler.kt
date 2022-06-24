@@ -1,17 +1,16 @@
 package com.companyname.appname.presentation.common
 
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
-import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 
-class RxLifecycleHandler<T>(
+class RxLifecycleHandler<T : Any>(
     owner: LifecycleOwner,
-    private val flowable: Flowable<T>,
+    private val observable: Observable<T>,
     private val observer: (T) -> Unit
-) : LifecycleObserver {
+) : DefaultLifecycleObserver {
     private val lifecycle = owner.lifecycle
     private var disposable: Disposable? = null
 
@@ -25,24 +24,24 @@ class RxLifecycleHandler<T>(
     private fun observeIfPossible() {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             disposable ?: let {
-                disposable = flowable.subscribe { data -> observer(data) }
+                disposable = observable.subscribe { data -> observer(data) }
             }
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
         observeIfPossible()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
+    override fun onStop(owner: LifecycleOwner) {
+        super.onStop(owner)
         disposable?.dispose()
         disposable = null
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
         lifecycle.removeObserver(this)
     }
 }

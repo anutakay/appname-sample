@@ -4,7 +4,7 @@ import com.companyname.appname.data.bored.repositories.DefaultBoredRepository
 import com.companyname.appname.data.bored.datasources.BoredDataSource
 import com.companyname.appname.data.bored.datasources.BoredDataSourceImpl
 import com.companyname.appname.domain.bored.repositories.BoredRepository
-import com.companyname.appname.domain.bored.usecases.GetRandomActivityUseCase
+import com.companyname.appname.domain.bored.usecases.GetRandomActivity
 import com.companyname.appname.data.bored.api.BoredApi
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ class BoredModule {
     @Provides
     @Singleton
     fun provideGetRandomActivityUseCase(repository: BoredRepository) =
-        GetRandomActivityUseCase(repository)
+        GetRandomActivity(repository)
 
     @Provides
     @Singleton

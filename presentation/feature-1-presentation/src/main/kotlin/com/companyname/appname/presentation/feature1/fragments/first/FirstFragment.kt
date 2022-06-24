@@ -4,23 +4,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.companyname.appname.feature1.databinding.FragmentFirstBinding
+import com.companyname.appname.presentation.common.delegate.IRxObserverDelegate
+import com.companyname.appname.presentation.common.delegate.RxObserverDelegate
 import com.companyname.appname.presentation.feature1.fragments.first.rmvvm.AnotherFeatureButtonClickAction
 import com.companyname.appname.presentation.feature1.fragments.first.rmvvm.FirstViewModel
 import com.companyname.appname.presentation.feature1.fragments.first.rmvvm.NextFragmentButtonClickAction
-import com.companyname.appname.presentation.common.BaseFragment
 import com.github.terrakok.cicerone.Screen
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 @AndroidEntryPoint
-class FirstFragment : BaseFragment() {
+class FirstFragment : Fragment(),
+    IRxObserverDelegate by RxObserverDelegate() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: FirstViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerObserverDelegate(this)
+        bindViewModel()
+    }
+
+    private fun bindViewModel() = with(viewModel) {
+        navigateViewState()
+            .observeOn(AndroidSchedulers.mainThread())
+            .observe { handleNavigate(it) }
+    }
+
+    private fun handleNavigate(screen: Screen) {
+        TODO("Not yet implemented")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,20 +70,5 @@ class FirstFragment : BaseFragment() {
         anotherFeatureButton.setOnClickListener {
             viewModel.actionStream.onNext(AnotherFeatureButtonClickAction)
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bindViewModel()
-    }
-
-    private fun bindViewModel() = with(viewModel) {
-        navigateViewState()
-            .observeOn(AndroidSchedulers.mainThread())
-            .observe(::handleNavigate)
-    }
-
-    private fun handleNavigate(screen: Screen) {
-        TODO("Not yet implemented")
     }
 }

@@ -1,7 +1,7 @@
 package com.companyname.appname.data.bored.datasources
 
 import com.companyname.appname.domain.bored.entities.Activity
-import com.companyname.appname.domain.common.Result
+import com.companyname.appname.domain.common.LCE
 import com.companyname.appname.data.bored.api.BoredApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -13,11 +13,11 @@ class BoredDataSourceImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BoredDataSource {
 
-    override suspend fun getRandomActivity(): Result<Activity> = withContext(ioDispatcher) {
+    override suspend fun getRandomActivity(): LCE<Activity> = withContext(ioDispatcher) {
         val response = api.getRandomActivity().awaitResponse()
         return@withContext if (response.isSuccessful) {
             val body = response.body()!!
-            Result.Success(
+            LCE.Content(
                 Activity(
                     activity = body.activity,
                     type = body.type,
@@ -29,7 +29,7 @@ class BoredDataSourceImpl(
                 )
             )
         } else {
-            Result.Error(IllegalStateException("Response error"))
+            LCE.Error(IllegalStateException("Response error"))
         }
     }
 }

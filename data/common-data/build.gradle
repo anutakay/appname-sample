@@ -43,6 +43,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
 
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.6.0'
+
     implementation project(':common-domain')
     api project(':bored-api-data')
 
