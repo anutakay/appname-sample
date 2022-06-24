@@ -25,22 +25,17 @@ class FirstViewModel @Inject constructor(
     init {
         actionStream.filterTo(NextFragmentButtonClickAction::class.java)
             .throttleFirst(1, TimeUnit.SECONDS)
-            .subscribe(::nextFragmentButtonClicked)
+            .subscribe { nextFragmentButtonClicked() }
             .track()
 
         actionStream.filterTo(AnotherFeatureButtonClickAction::class.java)
             .throttleFirst(1, TimeUnit.SECONDS)
-            .subscribe(::anotherFeatureButtonClick)
+            .subscribe { anotherFeatureButtonClick() }
             .track()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun nextFragmentButtonClicked(action: NextFragmentButtonClickAction) =
-        router.navigateTo(screens.second())
-
-    @Suppress("UNUSED_PARAMETER")
-    private fun anotherFeatureButtonClick(action: AnotherFeatureButtonClickAction) =
-        router.newRootScreen(screens.feature2())
+    private fun nextFragmentButtonClicked() = router.navigateTo(screens.second())
+    private fun anotherFeatureButtonClick() = router.newRootScreen(screens.feature2())
 
     fun navigateViewState(): Flowable<Screen> = navigateViewState.hide()
 }
