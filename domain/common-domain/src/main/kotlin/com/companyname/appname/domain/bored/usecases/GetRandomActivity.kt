@@ -11,6 +11,9 @@ class GetRandomActivity(
     fun instance() = UseCase(repository)
 
     class UseCase(private val repository: BoredRepository) {
-        fun execute(): Observable<LCE<Activity>> = repository.getRandomActivity().toObservable()
+        fun execute(): Observable<LCE<Activity>> = Observable.concat(
+            Observable.just(LCE.Loading),
+            repository.getRandomActivity().toObservable()
+        )
     }
 }

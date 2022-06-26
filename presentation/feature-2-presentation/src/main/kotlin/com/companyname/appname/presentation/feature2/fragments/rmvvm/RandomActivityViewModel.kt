@@ -10,6 +10,7 @@ import com.companyname.appname.presentation.common.extention.filterTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.processors.BehaviorProcessor
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,29 +23,29 @@ class RandomActivityViewModel @Inject constructor(
 
     val actionStream: PublishSubject<Action> = PublishSubject.create()
 
-    private val viewState by lazy {
-        BehaviorProcessor.createDefault((RandomActivityViewState(title = "")))
-    }
+    private val results = BehaviorSubject.createDefault(RandomActivityViewState(""))
 
-    private val progressState by lazy {
-        BehaviorProcessor.createDefault(false)
-    }
+    private val progressState = BehaviorProcessor.createDefault(false)
 
     init {
         actionStream.filterTo(LoadRandomActivityAction::class.java)
             .throttleFirst(1, TimeUnit.SECONDS)
-            .flatMap { getRandomActivity.instance().execute() }
-            .subscribe {
-                when (it) {
-                    is LCE.Content -> viewState.onNext(viewState.value!!.copy(title = it.data.activity))
-                    is LCE.Error -> TODO()
-                    LCE.Loading -> TODO()
-                }
-            }
-            .track()
+            .concatMap { getRandomActivity.instance().execute() }
+            .map { RandomActivityViewState("", result = it) }
+            .subscribe(results)
     }
 
-    fun viewState(): Observable<RandomActivityViewState> = viewState.toObservable()
+    fun viewState(): Observable<RandomActivityViewState> =
+        results.scan { currentState, newResult ->
+            newResult.result?.let {
+                when (it) {
+                    is LCE.Content -> currentState.copy(title = it.data.activity)
+                    is LCE.Error -> currentState
+                    LCE.Loading -> currentState
+                }
+            } ?: currentState
+        }
+
     fun progressState(): Observable<Boolean> = progressState.toObservable()
 
     override fun onCleared() {
